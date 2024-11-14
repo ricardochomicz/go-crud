@@ -3,9 +3,15 @@ package model
 import (
 	"crypto/md5"
 	"encoding/hex"
-
-	"github.com/ricardochomicz/go-crud/src/configuration/rest_err"
 )
+
+type UserDomainInterface interface {
+	GetEmail() string
+	GetPassword() string
+	GetName() string
+	GetAge() int8
+	EncryptPassword()
+}
 
 func NewUserDomain(
 	email, password, name string,
@@ -26,14 +32,17 @@ type userDomain struct {
 	age      int8
 }
 
-// CreateUser implements UserDomainInterface.
-func (ud *userDomain) CreateUser() *rest_err.RestErr {
-	panic("unimplemented")
+func (ud *userDomain) GetEmail() string {
+	return ud.email
 }
-
-// DeleteUser implements UserDomainInterface.
-func (ud *userDomain) DeleteUser(string) *rest_err.RestErr {
-	panic("unimplemented")
+func (ud *userDomain) GetPassword() string {
+	return ud.password
+}
+func (ud *userDomain) GetName() string {
+	return ud.name
+}
+func (ud *userDomain) GetAge() int8 {
+	return ud.age
 }
 
 // EncryptPassword é um método da estrutura UserDomain que tem como objetivo
@@ -48,11 +57,4 @@ func (ud *userDomain) EncryptPassword() {
 	// Calcula o hash e converte o resultado para uma string hexadecimal.
 	// O resultado é então atribuído de volta à propriedade Password do usuário.
 	ud.password = hex.EncodeToString(hash.Sum(nil))
-}
-
-type UserDomainInterface interface {
-	CreateUser() *rest_err.RestErr
-	UpdateUser(string) *rest_err.RestErr
-	FindUser(string) (*userDomain, *rest_err.RestErr)
-	DeleteUser(string) *rest_err.RestErr
 }
