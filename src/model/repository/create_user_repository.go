@@ -8,6 +8,7 @@ import (
 	"github.com/ricardochomicz/go-crud/src/configuration/rest_err"
 	"github.com/ricardochomicz/go-crud/src/model"
 	"github.com/ricardochomicz/go-crud/src/model/repository/entity/converter"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 const (
@@ -30,7 +31,8 @@ func (ur *userRepository) CreateUser(
 	if err != nil {
 		return nil, rest_err.NewInternalServerError(err.Error())
 	}
-	userDomain.SetID(result.InsertedID.(string))
 
-	return userDomain, nil
+	value.ID = result.InsertedID.(primitive.ObjectID)
+
+	return converter.ConverterEntityToDomain(*value), nil
 }

@@ -6,6 +6,7 @@ type UserDomainInterface interface {
 	GetName() string
 	GetAge() int8
 	GetJSONValue() (string, error)
+	GetID() string
 	SetID(string)
 	EncryptPassword()
 }
