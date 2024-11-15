@@ -7,6 +7,7 @@ import (
 	"github.com/ricardochomicz/go-crud/src/configuration/logger"
 	"github.com/ricardochomicz/go-crud/src/configuration/rest_err"
 	"github.com/ricardochomicz/go-crud/src/model"
+	"github.com/ricardochomicz/go-crud/src/model/repository/entity/converter"
 )
 
 const (
@@ -22,10 +23,9 @@ func (ur *userRepository) CreateUser(
 	collection_name := os.Getenv(MONGODB_COLLECTION)
 
 	collection := ur.databaseConnection.Collection(collection_name)
-	value, err := userDomain.GetJSONValue()
-	if err != nil {
-		return nil, rest_err.NewInternalServerError(err.Error())
-	}
+
+	value := converter.ConverterDomainEntity(userDomain)
+
 	result, err := collection.InsertOne(context.Background(), value)
 	if err != nil {
 		return nil, rest_err.NewInternalServerError(err.Error())
