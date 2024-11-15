@@ -26,7 +26,6 @@ func (ud *userDomain) GetJSONValue() (string, error) {
 	return string(b), nil
 }
 
-// SetID implements UserDomainInterface.
 func (ud *userDomain) SetID(id string) {
 
 }
@@ -43,6 +42,3 @@ func (ud *userDomain) GetName() string {
 func (ud *userDomain) GetAge() int8 {
 	return ud.age
 }
-
-// EncryptPassword é um método da estrutura UserDomain que tem como objetivo
-// criptografar a senha do usuário utilizando o algoritmo MD5.
