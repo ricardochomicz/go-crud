@@ -26,6 +26,3 @@ type userControllerInterface struct {
 }
 
 // FindUserByID implements UserControllerInterface.
-func (uc *userControllerInterface) FindUserByID(c *gin.Context) {
-	panic("unimplemented")
-}

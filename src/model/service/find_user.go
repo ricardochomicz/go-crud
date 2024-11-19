@@ -1,11 +1,22 @@
 package service
 
 import (
+	"github.com/ricardochomicz/go-crud/src/configuration/logger"
 	"github.com/ricardochomicz/go-crud/src/configuration/rest_err"
 	"github.com/ricardochomicz/go-crud/src/model"
+	"go.uber.org/zap"
 )
 
-func (*userDomainService) FindUser(string) (
-	*model.UserDomainInterface, *rest_err.RestErr) {
-	return nil, nil
+func (ud *userDomainService) FindUserByIDService(
+	id string,
+) (model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init findUserById service", zap.String("journey", "findUserById"))
+	return ud.userRepository.FindUserById(id)
+}
+
+func (ud *userDomainService) FindUserByEmailService(
+	email string,
+) (model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init findUserByEmail service", zap.String("journey", "findUserByEmail"))
+	return ud.userRepository.FindUserByEmail(email)
 }

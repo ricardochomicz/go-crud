@@ -9,9 +9,9 @@ func ConverterDomainEntity(
 	domain model.UserDomainInterface,
 ) *entity.UserEntity {
 	return &entity.UserEntity{
-		Name:     domain.GetName(),
 		Email:    domain.GetEmail(),
 		Password: domain.GetPassword(),
+		Name:     domain.GetName(),
 		Age:      domain.GetAge(),
 	}
 }
