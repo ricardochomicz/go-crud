@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -31,8 +32,39 @@ func (ud *userDomain) GenerateToken() (string, *rest_err.RestErr) {
 	if err != nil {
 		return "", rest_err.NewInternalServerError(
 			fmt.Sprintf("Error trying to generate user token, err=%s", err.Error()))
-
 	}
 
 	return tokenString, nil
+}
+
+func VerifyToken(tokenValue string) (UserDomainInterface, *rest_err.RestErr) {
+	token, err := jwt.Parse(RemoveBearerPrefix(tokenValue), func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv(JWT_SECRET_KEY)), nil
+	})
+
+	if err != nil {
+		return nil, rest_err.NewUnauthorizedError("invalid token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok || !token.Valid {
+		return nil, rest_err.NewUnauthorizedError("invalid token")
+	}
+
+	return &userDomain{
+		id:    claims["id"].(string),
+		email: claims["email"].(string),
+		name:  claims["name"].(string),
+		age:   int8(claims["age"].(int8)),
+	}, nil
+}
+
+func RemoveBearerPrefix(token string) string {
+	if strings.HasPrefix(token, "Bearer ") {
+		token = strings.TrimPrefix("Bearer ", token)
+	}
+	return token
 }

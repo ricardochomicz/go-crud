@@ -65,6 +65,14 @@ func NewInternalServerError(message string) *RestErr {
 	}
 }
 
+func NewUnauthorizedError(message string) *RestErr {
+	return &RestErr{
+		Message: message,
+		Err:     "unauthorized",
+		Code:    http.StatusUnauthorized,
+	}
+}
+
 // NewNotFoundError creates a new RestErr representing a not found error with
 // the specified message. It sets the error type to "not found" and the HTTP
 // status code to 404 (Not Found).
