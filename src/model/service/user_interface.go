@@ -29,5 +29,5 @@ type UserDomainService interface {
 	FindUserByIDService(
 		id string,
 	) (model.UserDomainInterface, *rest_err.RestErr)
-	DeleteUser(string) *rest_err.RestErr
+	DeleteUserService(userId string) *rest_err.RestErr
 }
