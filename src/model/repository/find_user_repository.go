@@ -16,6 +16,34 @@ import (
 	"go.uber.org/zap"
 )
 
+func (ur *userRepository) FindAllUsers() ([]model.UserDomainInterface, *rest_err.RestErr) {
+
+	logger.Info("Init findAllUsers repository", zap.String("journey", "findAllUsers"))
+
+	collection_name := os.Getenv(MONGODB_COLLECTION)
+
+	collection := ur.databaseConnection.Collection(collection_name)
+
+	cursor, err := collection.Find(context.Background(), bson.D{{}})
+	if err != nil {
+		errorMessage := "Error trying to find all users"
+		logger.Error(errorMessage, err, zap.String("journey", "findAllUsers"))
+		return nil, rest_err.NewInternalServerError(errorMessage)
+	}
+
+	var userEntities []entity.UserEntity
+	if err = cursor.All(context.Background(), &userEntities); err != nil {
+		errorMessage := "Error trying to convert to user entities"
+		logger.Error(errorMessage, err, zap.String("journey", "findAllUsers"))
+		return nil, rest_err.NewInternalServerError(errorMessage)
+	}
+
+	logger.Info("FindAllUsers repository executed successfully",
+		zap.String("journey", "findAllUsers"))
+
+	return converter.ConverterEntitiesToDomain(userEntities), nil
+}
+
 func (ur *userRepository) FindUserByEmail(
 	email string,
 ) (model.UserDomainInterface, *rest_err.RestErr) {

@@ -19,3 +19,13 @@ func ConverterEntityToDomain(
 
 	return domain
 }
+
+func ConverterEntitiesToDomain(
+	entities []entity.UserEntity,
+) []model.UserDomainInterface {
+	var domains []model.UserDomainInterface
+	for _, entity := range entities {
+		domains = append(domains, ConverterEntityToDomain(entity))
+	}
+	return domains
+}

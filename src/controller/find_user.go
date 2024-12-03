@@ -13,15 +13,32 @@ import (
 	"go.uber.org/zap"
 )
 
-// func (uc *userControllerInterface) FindUser(c *gin.Context) {
-// }
+func (uc *userControllerInterface) FindAllUsers(c *gin.Context) {
+	logger.Info("Init findAllUser controller", zap.String("journey", "findAllUser"))
+
+	// Chama o serviço para buscar todos os usuários
+	userDomain, err := uc.service.FindAllUsersService()
+	if err != nil {
+		logger.Error("Error trying to find all users service",
+			err,
+			zap.String("journey", "findAllUser Service"))
+		c.JSON(err.Code, err)
+		return
+	}
+
+	logger.Info("FindAllUser  controller executed successfully",
+		zap.String("journey", "findAllUser "))
+
+	// Converte os usuários do domínio para a resposta e retorna
+	c.JSON(http.StatusOK, view.ConvertDomainsToResponses(userDomain))
+}
 
 func (uc *userControllerInterface) FindUserByID(c *gin.Context) {
 	logger.Info("Init findUserById controller", zap.String("journey", "findUserById"))
 
 	userId := c.Param("userId")
 
-	logger.Info(fmt.Sprintf("User authenticated successfully: %#v"))
+	logger.Info("User authenticated successfully")
 
 	if _, err := primitive.ObjectIDFromHex(userId); err != nil {
 		logger.Error("Error trying to parse user id",

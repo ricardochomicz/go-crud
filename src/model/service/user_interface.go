@@ -23,6 +23,8 @@ type UserDomainService interface {
 	UpdateUserService(
 		userId string,
 		userDomain model.UserDomainInterface) *rest_err.RestErr
+
+	FindAllUsersService() ([]model.UserDomainInterface, *rest_err.RestErr)
 	FindUserByEmailService(
 		email string,
 	) (model.UserDomainInterface, *rest_err.RestErr)
