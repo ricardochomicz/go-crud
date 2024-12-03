@@ -53,7 +53,7 @@ func TestUserRepository_FindAllUsers(t *testing.T) {
 		repo := NewUserRepository(databaseMock)
 		users, err := repo.FindAllUsers()
 
-		assert.NotNil(t, err)
+		assert.Nil(t, err)
 		assert.Len(t, users, 2) // Verifica se dois usuários foram retornados.
 
 		// Verifique os dados dos usuários retornados.
